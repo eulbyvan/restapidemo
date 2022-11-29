@@ -25,8 +25,8 @@ public class CourseController {
 		return courseService.findCourses();
 	}
 
-	@GetMapping
-	public Optional<Course> findCourseById(String id) {
+	@GetMapping("/{id}")
+	public Optional<Course> findCourseById(@PathVariable("id") String id) {
 		return courseService.findCourseById(id);
 	}
 
@@ -36,12 +36,12 @@ public class CourseController {
 	}
 
 	@PutMapping
-	public void editCourse(Course course, String id) {
+	public void editCourse(@RequestBody Course course, @RequestBody String id) {
 		courseService.editCourse(course, id);
 	}
 
-	@DeleteMapping
-	public void removeCourse(String id) {
+	@DeleteMapping("/{id}")
+	public void removeCourse(@PathVariable String id) {
 		courseService.removeCourse(id);
 	}
 }
