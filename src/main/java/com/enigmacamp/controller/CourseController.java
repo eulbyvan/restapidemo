@@ -35,13 +35,13 @@ public class CourseController {
 		return courseService.addCourse(course);
 	}
 
-	@PutMapping
-	public void editCourse(@RequestBody Course course, @RequestBody String id) {
+	@PutMapping("/{id}")
+	public void editCourse(@RequestBody Course course, @PathVariable("id") String id) {
 		courseService.editCourse(course, id);
 	}
 
 	@DeleteMapping("/{id}")
-	public void removeCourse(@PathVariable String id) {
+	public void removeCourse(@PathVariable("id") String id) {
 		courseService.removeCourse(id);
 	}
 }

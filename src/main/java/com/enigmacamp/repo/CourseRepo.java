@@ -54,7 +54,7 @@ public class CourseRepo implements ICourseRepo {
 	@Override
 	public void delete(String id) {
 		for (Course course : courses) {
-			if (course.getId() == id) {
+			if (course.getId().equals(id)) {
 				courses.remove(course);
 				break;
 			}
