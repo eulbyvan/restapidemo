@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author stu (https://www.eulbyvan.com/)
@@ -16,7 +18,7 @@ import java.util.Optional;
  */
 
 @Service
-public class CourseService implements ICourseService{
+public class CourseService implements ICourseService {
 	@Autowired
 	private ICourseRepo courseRepo;
 
@@ -45,6 +47,26 @@ public class CourseService implements ICourseService{
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public List<Course> findByKeyword(String keyword, String value) {
+		if (keyword.equalsIgnoreCase("title")) {
+			List<Course> coursesFoundByTitle = courseRepo.getAll().stream().filter(c -> c.getTitle().equals(value)).collect(Collectors.toList());
+			return coursesFoundByTitle;
+		}
+
+		if (keyword.equalsIgnoreCase("description")) {
+			List<Course> coursesFoundByTitle = courseRepo.getAll().stream().filter(c -> c.getDescription().equals(value)).collect(Collectors.toList());
+			return coursesFoundByTitle;
+		}
+
+		if (keyword.equalsIgnoreCase("link")) {
+			List<Course> coursesFoundByTitle = courseRepo.getAll().stream().filter(c -> c.getLink().equals(value)).collect(Collectors.toList());
+			return coursesFoundByTitle;
+		}
+
+		return null;
 	}
 
 	@Override

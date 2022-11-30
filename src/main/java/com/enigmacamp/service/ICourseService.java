@@ -13,8 +13,14 @@ import java.util.Optional;
 
 public interface ICourseService {
 	Course addCourse(Course course);
+
 	List<Course> findCourses();
+
 	Optional<Course> findCourseById(String id);
+
+	List<Course> findByKeyword(String keyword, String value);
+
 	void editCourse(Course course, String id);
+
 	void removeCourse(String id);
 }

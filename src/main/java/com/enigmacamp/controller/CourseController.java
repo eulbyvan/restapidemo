@@ -88,4 +88,16 @@ public class CourseController {
 
 		return ResponseEntity.status(HttpStatus.OK).body(res);
 	}
+
+	@GetMapping(params = {"keyword", "value"})
+	public ResponseEntity findByKeyword(@RequestParam String keyword, @RequestParam String value) {
+		List<Course> data = courseService.findByKeyword(keyword, value);
+
+		res.setCode("00");
+		res.setMsg("course updated");
+		res.setStatus("ok");
+		res.setData(data);
+
+		return ResponseEntity.status(HttpStatus.OK).body(res);
+	}
 }

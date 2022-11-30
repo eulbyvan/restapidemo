@@ -14,8 +14,14 @@ import java.util.Optional;
 
 public interface ICourseRepo {
 	List<Course> getAll();
-	Course createCourse (Course course);
+
+	Course createCourse(Course course);
+
 	Optional<Course> findById(String id);
+
+	List<Course> findByKeyword(String keyword, String value);
+
 	void update(Course course, String id);
+
 	void delete(String id);
 }
