@@ -6,6 +6,7 @@ import com.enigmacamp.repo.ICourseRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,22 +52,17 @@ public class CourseService implements ICourseService {
 
 	@Override
 	public List<Course> findByKeyword(String keyword, String value) {
+		List<Course> coursesFoundByTitle = new ArrayList<>();
+
 		if (keyword.equalsIgnoreCase("title")) {
-			List<Course> coursesFoundByTitle = courseRepo.getAll().stream().filter(c -> c.getTitle().equals(value)).collect(Collectors.toList());
-			return coursesFoundByTitle;
+			coursesFoundByTitle = courseRepo.getAll().stream().filter(c -> c.getTitle().equals(value)).collect(Collectors.toList());
+		} else if (keyword.equalsIgnoreCase("description")) {
+			coursesFoundByTitle = courseRepo.getAll().stream().filter(c -> c.getDescription().equals(value)).collect(Collectors.toList());
+		} else if (keyword.equalsIgnoreCase("link")) {
+			coursesFoundByTitle = courseRepo.getAll().stream().filter(c -> c.getLink().equals(value)).collect(Collectors.toList());
 		}
 
-		if (keyword.equalsIgnoreCase("description")) {
-			List<Course> coursesFoundByTitle = courseRepo.getAll().stream().filter(c -> c.getDescription().equals(value)).collect(Collectors.toList());
-			return coursesFoundByTitle;
-		}
-
-		if (keyword.equalsIgnoreCase("link")) {
-			List<Course> coursesFoundByTitle = courseRepo.getAll().stream().filter(c -> c.getLink().equals(value)).collect(Collectors.toList());
-			return coursesFoundByTitle;
-		}
-
-		return null;
+		return coursesFoundByTitle;
 	}
 
 	@Override
