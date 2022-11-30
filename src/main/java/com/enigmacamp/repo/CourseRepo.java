@@ -1,6 +1,8 @@
 package com.enigmacamp.repo;
 
 import com.enigmacamp.model.Course;
+import com.enigmacamp.util.IRandomStringGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -15,6 +17,9 @@ import java.util.Optional;
 
 @Repository
 public class CourseRepo implements ICourseRepo {
+
+	@Autowired
+	IRandomStringGenerator randomStringGenerator;
 	private List<Course> courses = new ArrayList<>();
 
 	@Override
@@ -24,6 +29,7 @@ public class CourseRepo implements ICourseRepo {
 
 	@Override
 	public Course createCourse(Course course) {
+		course.setId(randomStringGenerator.random());
 		courses.add(course);
 		return course;
 	}
