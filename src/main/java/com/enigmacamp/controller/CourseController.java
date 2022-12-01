@@ -2,6 +2,7 @@ package com.enigmacamp.controller;
 
 import com.enigmacamp.model.Course;
 import com.enigmacamp.model.request.CourseReq;
+import com.enigmacamp.model.response.ErrorRes;
 import com.enigmacamp.model.response.SuccessRes;
 import com.enigmacamp.service.ICourseService;
 import org.modelmapper.ModelMapper;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @author stu (https://www.eulbyvan.com/)
@@ -20,7 +22,7 @@ import java.util.Optional;
  */
 
 @RestController
-@RequestMapping("/course")
+@RequestMapping("/courses")
 public class CourseController {
 	@Autowired
 	ICourseService courseService;
@@ -30,74 +32,112 @@ public class CourseController {
 
 	private SuccessRes<Object> res = new SuccessRes<>();
 
-	@GetMapping
+	@GetMapping("/all-courses")
 	public ResponseEntity findCourses() {
-		List<Course> data = courseService.findCourses();
+		try {
+			List<Course> data = courseService.findCourses();
 
-		res.setCode("00");
-		res.setMsg("success get all courses");
-		res.setStatus("ok");
-		res.setData(data);
+			res.setCode("00");
+			res.setMsg("success");
+			res.setStatus("ok");
+			res.setData(data);
 
-		return ResponseEntity.status(HttpStatus.OK).body(res);
+			return ResponseEntity.status(HttpStatus.OK).body(res);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRes("X01", e.getMessage()));
+		}
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/course/{id}")
 	public ResponseEntity findCourseById(@PathVariable("id") String id) {
-		Optional<Course> data = courseService.findCourseById(id);
+		try {
+			Optional<Course> data = courseService.findCourseById(id);
 
-		res.setCode("00");
-		res.setMsg("course found");
-		res.setStatus("ok");
-		res.setData(data);
+			res.setCode("00");
+			res.setMsg("success");
+			res.setStatus("ok");
+			res.setData(data);
 
-		return ResponseEntity.status(HttpStatus.OK).body(res);
+			return ResponseEntity.status(HttpStatus.OK).body(res);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRes("X01", e.getMessage()));
+		}
 	}
 
-	@PostMapping
+	@PostMapping("/add-course")
 	public ResponseEntity addCourse(@RequestBody CourseReq req) {
-		Course course = modelMapper.map(req, Course.class);
-		Course data = courseService.addCourse(course);
+		try {
+			Course course = modelMapper.map(req, Course.class);
+			Course data = courseService.addCourse(course);
 
-		res.setCode("00");
-		res.setMsg("new course added");
-		res.setStatus("ok");
-		res.setData(data);
+			res.setCode("00");
+			res.setMsg("success");
+			res.setStatus("ok");
+			res.setData(data);
 
-		return ResponseEntity.status(HttpStatus.CREATED).body(res);
+			return ResponseEntity.status(HttpStatus.CREATED).body(res);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRes("X01", e.getMessage()));
+		}
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping("/edit-course/{id}")
 	public ResponseEntity editCourse(@RequestBody Course course, @PathVariable("id") String id) {
-		courseService.editCourse(course, id);
+		try {
+			courseService.editCourse(course, id);
 
-		res.setCode("00");
-		res.setMsg("course updated");
-		res.setStatus("ok");
+			res.setCode("00");
+			res.setMsg("success");
+			res.setStatus("ok");
 
-		return ResponseEntity.status(HttpStatus.OK).body(res);
+			return ResponseEntity.status(HttpStatus.OK).body(res);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRes("X01", e.getMessage()));
+		}
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/remove-course/{id}")
 	public ResponseEntity removeCourse(@PathVariable("id") String id) {
-		courseService.removeCourse(id);
+		try {
+			courseService.removeCourse(id);
 
-		res.setCode("00");
-		res.setMsg("course updated");
-		res.setStatus("ok");
+			res.setCode("00");
+			res.setMsg("success");
+			res.setStatus("ok");
 
-		return ResponseEntity.status(HttpStatus.OK).body(res);
+			return ResponseEntity.status(HttpStatus.OK).body(res);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRes("X01", e.getMessage()));
+		}
 	}
 
-	@GetMapping(params = {"keyword", "value"})
-	public ResponseEntity findByKeyword(@RequestParam String keyword, @RequestParam String value) {
-		List<Course> data = courseService.findByKeyword(keyword, value);
+	@GetMapping(params = {"value"}, path = "/search-courses-by-title")
+	public ResponseEntity findByTitleContains(@RequestParam String value) {
+		try {
+			List<Course> data = courseService.findByTitleContains(value);
 
-		res.setCode("00");
-		res.setMsg("course updated");
-		res.setStatus("ok");
-		res.setData(data);
+			res.setCode("00");
+			res.setMsg("success");
+			res.setStatus("ok");
+			res.setData(data);
+			return ResponseEntity.status(HttpStatus.OK).body(res);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRes("X01", e.getMessage()));
+		}
+	}
 
-		return ResponseEntity.status(HttpStatus.OK).body(res);
+	@GetMapping(params = {"value"}, path = "/search-courses-by-description")
+	public ResponseEntity findByDescriptionContains(@RequestParam String value) {
+		try {
+			List<Course> data = courseService.findByDescriptionContains(value);
+
+			res.setCode("00");
+			res.setMsg("success");
+			res.setStatus("ok");
+			res.setData(data);
+			return ResponseEntity.status(HttpStatus.OK).body(res);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRes("X01", e.getMessage()));
+		}
 	}
 }

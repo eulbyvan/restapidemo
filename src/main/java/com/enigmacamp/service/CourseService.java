@@ -1,85 +1,72 @@
 package com.enigmacamp.service;
 
+import com.enigmacamp.exception.NotFoundException;
 import com.enigmacamp.model.Course;
-import com.enigmacamp.repo.CourseRepo;
 import com.enigmacamp.repo.ICourseRepo;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author stu (https://www.eulbyvan.com/)
  * @version 1.0
- * @since 29/11/22
+ * @since 01/12/22
  */
 
 @Service
 public class CourseService implements ICourseService {
 	@Autowired
+	private ModelMapper modelMapper;
+	@Autowired
 	private ICourseRepo courseRepo;
 
 	@Override
 	public Course addCourse(Course course) {
-		try {
-			return courseRepo.createCourse(course);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		return courseRepo.save(course);
 	}
 
 	@Override
-	public List<Course> findCourses() {
-		try {
-			return courseRepo.getAll();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+	public List<Course> findCourses() throws Exception {
+		return courseRepo.findAll();
 	}
 
 	@Override
 	public Optional<Course> findCourseById(String id) {
-		try {
-			return courseRepo.findById(id);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		return courseRepo.findById(id);
 	}
 
 	@Override
-	public List<Course> findByKeyword(String keyword, String value) {
-		List<Course> coursesFoundByTitle = new ArrayList<>();
+	public List<Course> findByTitleContains(String value) {
+		List<Course> courses = courseRepo.findByTitleContains(value);
 
-		if (keyword.equalsIgnoreCase("title")) {
-			coursesFoundByTitle = courseRepo.getAll().stream().filter(c -> c.getTitle().equals(value)).collect(Collectors.toList());
-		} else if (keyword.equalsIgnoreCase("description")) {
-			coursesFoundByTitle = courseRepo.getAll().stream().filter(c -> c.getDescription().equals(value)).collect(Collectors.toList());
-		} else if (keyword.equalsIgnoreCase("link")) {
-			coursesFoundByTitle = courseRepo.getAll().stream().filter(c -> c.getLink().equals(value)).collect(Collectors.toList());
-		}
+		if (courses.isEmpty()) throw new NotFoundException("Course with " + value + " title is not found");
 
-		return coursesFoundByTitle;
+		return courses;
+	}
+
+	@Override
+	public List<Course> findByDescriptionContains(String value) {
+		List<Course> courses = courseRepo.findByDescriptionContains(value);
+
+		if (courses.isEmpty()) throw new NotFoundException("Course with " + value + " description is not found");
+
+		return courses;
 	}
 
 	@Override
 	public void editCourse(Course course, String id) {
-		try {
-			courseRepo.update(course, id);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		Optional<Course> existingCourse = findCourseById(id);
+		existingCourse.ifPresent(c -> {
+			course.setId(c.getId());
+			courseRepo.save(course);
+		});
 	}
 
 	@Override
 	public void removeCourse(String id) {
-		try {
-			courseRepo.delete(id);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
+		courseRepo.deleteById(id);
 	}
 }

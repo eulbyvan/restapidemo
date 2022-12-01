@@ -2,26 +2,21 @@ package com.enigmacamp.repo;
 
 import com.enigmacamp.model.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.UUID;
 
 /**
  * @author stu (https://www.eulbyvan.com/)
  * @version 1.0
- * @since 29/11/22
+ * @since 01/12/22
  */
 
-public interface ICourseRepo {
-	List<Course> getAll();
+public interface ICourseRepo extends JpaRepository<Course, String> {
+	@Query("SELECT c FROM Course c WHERE c.title LIKE %?1%")
+	List<Course> findByTitleContains(String title);
 
-	Course createCourse(Course course);
-
-	Optional<Course> findById(String id);
-
-	List<Course> findByKeyword(String keyword, String value);
-
-	void update(Course course, String id);
-
-	void delete(String id);
+	@Query("SELECT c FROM Course c WHERE c.description LIKE %?1%")
+	List<Course> findByDescriptionContains(String description);
 }

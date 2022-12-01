@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author stu (https://www.eulbyvan.com/)
@@ -16,7 +17,7 @@ import java.util.Optional;
  */
 
 @Repository
-public class CourseRepo implements ICourseRepo {
+public class CourseRepoArray implements ICourseRepoArray {
 
 	@Autowired
 	IRandomStringGenerator randomStringGenerator;
@@ -47,6 +48,15 @@ public class CourseRepo implements ICourseRepo {
 
 	@Override
 	public List<Course> findByKeyword(String keyword, String value) {
+
+		if (keyword.equalsIgnoreCase("title")) {
+			return courses.stream().filter(c -> c.getTitle().equals(value)).collect(Collectors.toList());
+		} else if (keyword.equalsIgnoreCase("description")) {
+			return courses.stream().filter(c -> c.getDescription().equals(value)).collect(Collectors.toList());
+		} else if (keyword.equalsIgnoreCase("link")) {
+			return courses.stream().filter(c -> c.getLink().equals(value)).collect(Collectors.toList());
+		}
+
 		return null;
 	}
 
