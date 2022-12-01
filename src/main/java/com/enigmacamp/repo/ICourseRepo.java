@@ -4,8 +4,9 @@ import com.enigmacamp.model.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
-import java.util.UUID;
 
 /**
  * @author stu (https://www.eulbyvan.com/)
@@ -19,4 +20,7 @@ public interface ICourseRepo extends JpaRepository<Course, String> {
 
 	@Query("SELECT c FROM Course c WHERE c.description LIKE %?1%")
 	List<Course> findByDescriptionContains(String description);
+
+	@Query(value = "SELECT c FROM Course c ORDER BY c.title")
+	List<Course> findSomeCourses(Pageable pageable);
 }

@@ -7,6 +7,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +28,11 @@ public class CourseService implements ICourseService {
 	@Override
 	public Course addCourse(Course course) {
 		return courseRepo.save(course);
+	}
+
+	@Override
+	public void addCourses(List<Course> courses) {
+		courseRepo.saveAll(courses);
 	}
 
 	@Override
@@ -52,6 +59,14 @@ public class CourseService implements ICourseService {
 		List<Course> courses = courseRepo.findByDescriptionContains(value);
 
 		if (courses.isEmpty()) throw new NotFoundException("Course with " + value + " description is not found");
+
+		return courses;
+	}
+
+	@Override
+	public List<Course> findSomeCourses(Pageable pageable) {
+		List<Course> courses = courseRepo.findSomeCourses(pageable);
+		if (courses.isEmpty()) throw new NotFoundException("no data");
 
 		return courses;
 	}

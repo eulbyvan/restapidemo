@@ -2,9 +2,10 @@ package com.enigmacamp.service;
 
 import com.enigmacamp.model.Course;
 
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * @author stu (https://www.eulbyvan.com/)
@@ -15,6 +16,8 @@ import java.util.UUID;
 public interface ICourseService {
 	Course addCourse(Course course);
 
+	void addCourses(List<Course> courses);
+
 	List<Course> findCourses() throws Exception;
 
 	Optional<Course> findCourseById(String id);
@@ -22,6 +25,9 @@ public interface ICourseService {
 	List<Course> findByTitleContains(String value);
 
 	List<Course> findByDescriptionContains(String description);
+
+
+	List<Course> findSomeCourses(Pageable pageable);
 
 	void editCourse(Course course, String id);
 
