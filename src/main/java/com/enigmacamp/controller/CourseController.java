@@ -3,10 +3,12 @@ package com.enigmacamp.controller;
 import com.enigmacamp.model.Course;
 import com.enigmacamp.model.request.CourseReq;
 import com.enigmacamp.model.response.ErrorRes;
+import com.enigmacamp.model.response.PagingResponse;
 import com.enigmacamp.model.response.SuccessRes;
 import com.enigmacamp.service.ICourseService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,17 +37,17 @@ public class CourseController {
 
 	private SuccessRes<Object> res = new SuccessRes<>();
 
-	@GetMapping("/all-courses")
-	public ResponseEntity findCourses() {
+	@GetMapping("/list")
+	public ResponseEntity findCourses(
+			@RequestParam(defaultValue = "1") Integer page,
+			@RequestParam(defaultValue = "5") Integer size,
+			@RequestParam(defaultValue = "DESC") String direction,
+			@RequestParam(defaultValue = "id") String sortBy
+	) {
 		try {
-			List<Course> data = courseService.findCourses();
+			Page<Course> courses = courseService.list(page, size, direction, sortBy);
 
-			res.setCode("00");
-			res.setMsg("success");
-			res.setStatus("ok");
-			res.setData(data);
-
-			return ResponseEntity.status(HttpStatus.OK).body(res);
+			return ResponseEntity.status(HttpStatus.OK).body(new PagingResponse<>("success", courses));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRes("X01", e.getMessage()));
 		}
