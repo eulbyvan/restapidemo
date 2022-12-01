@@ -149,7 +149,7 @@ public class CourseController {
 	@GetMapping("/find-some-courses")
 	public ResponseEntity findSomeCourses(@RequestParam int page, @RequestParam int pageSize) {
 		try {
-			List<Course> data = courseService.findSomeCourses((Pageable) PageRequest.of(page, pageSize));
+			List<Course> data = courseService.findSomeCourses(page, pageSize);
 
 			res.setCode("00");
 			res.setMsg("success");

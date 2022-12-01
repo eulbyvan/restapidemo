@@ -21,6 +21,6 @@ public interface ICourseRepo extends JpaRepository<Course, String> {
 	@Query("SELECT c FROM Course c WHERE c.description LIKE %?1%")
 	List<Course> findByDescriptionContains(String description);
 
-	@Query(value = "SELECT c FROM Course c ORDER BY c.title")
-	List<Course> findSomeCourses(Pageable pageable);
+	@Query(value = "SELECT * FROM tbl_course c ORDER BY c.title LIMIT ?2 OFFSET ((?1 - 1) * ?2)", nativeQuery = true)
+	List<Course> findSomeCourses(int page, int pageSize);
 }
