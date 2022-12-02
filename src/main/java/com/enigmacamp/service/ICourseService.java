@@ -27,9 +27,6 @@ public interface ICourseService {
 
 	List<Course> findByDescriptionContains(String description);
 
-
-	List<Course> findSomeCourses(int page, int pageSize);
-
 	void editCourse(Course course, String id);
 
 	void removeCourse(String id);

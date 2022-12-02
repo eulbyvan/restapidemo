@@ -29,4 +29,10 @@ public class Course {
 	private String description;
 	@Column(name = "link", nullable = false, length = 200)
 	private String link;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "course_type_id")
+	private CourseType courseType;
+	@OneToOne
+	@JoinColumn(name = "course_info_id")
+	private CourseInfo courseInfo;
 }

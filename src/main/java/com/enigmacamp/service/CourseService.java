@@ -66,14 +66,6 @@ public class CourseService implements ICourseService {
 	}
 
 	@Override
-	public List<Course> findSomeCourses(int page, int pageSize) {
-		List<Course> courses = courseRepo.findSomeCourses(page, pageSize);
-		if (courses.isEmpty()) throw new NotFoundException("no data");
-
-		return courses;
-	}
-
-	@Override
 	public void editCourse(Course course, String id) {
 		Optional<Course> existingCourse = findCourseById(id);
 		existingCourse.ifPresent(c -> {

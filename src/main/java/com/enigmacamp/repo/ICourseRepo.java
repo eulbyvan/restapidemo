@@ -4,8 +4,6 @@ import com.enigmacamp.model.Course;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import org.springframework.data.domain.Pageable;
-
 import java.util.List;
 
 /**
@@ -22,5 +20,5 @@ public interface ICourseRepo extends JpaRepository<Course, String> {
 	List<Course> findByDescriptionContains(String description);
 
 	@Query(value = "SELECT * FROM tbl_course c ORDER BY c.title LIMIT ?2 OFFSET ((?1 - 1) * ?2)", nativeQuery = true)
-	List<Course> findSomeCourses(int page, int pageSize);
+	List<Course> findSome(int page, int pageSize);
 }

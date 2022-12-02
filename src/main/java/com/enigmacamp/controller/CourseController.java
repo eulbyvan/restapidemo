@@ -9,16 +9,13 @@ import com.enigmacamp.service.ICourseService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author stu (https://www.eulbyvan.com/)
@@ -37,7 +34,7 @@ public class CourseController {
 
 	private SuccessRes<Object> res = new SuccessRes<>();
 
-	@GetMapping("/list")
+	@GetMapping("/")
 	public ResponseEntity findCourses(
 			@RequestParam(defaultValue = "1") Integer page,
 			@RequestParam(defaultValue = "5") Integer size,
@@ -53,7 +50,7 @@ public class CourseController {
 		}
 	}
 
-	@GetMapping("/course/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity findCourseById(@PathVariable("id") String id) {
 		try {
 			Optional<Course> data = courseService.findCourseById(id);
@@ -69,7 +66,7 @@ public class CourseController {
 		}
 	}
 
-	@PostMapping("/add-course")
+	@PostMapping("/")
 	public ResponseEntity addCourse(@RequestBody CourseReq req) {
 		try {
 			Course course = modelMapper.map(req, Course.class);
@@ -86,7 +83,7 @@ public class CourseController {
 		}
 	}
 
-	@PutMapping("/edit-course/{id}")
+	@PutMapping("/{id}")
 	public ResponseEntity editCourse(@RequestBody Course course, @PathVariable("id") String id) {
 		try {
 			courseService.editCourse(course, id);
@@ -101,7 +98,7 @@ public class CourseController {
 		}
 	}
 
-	@DeleteMapping("/remove-course/{id}")
+	@DeleteMapping("/{id}")
 	public ResponseEntity removeCourse(@PathVariable("id") String id) {
 		try {
 			courseService.removeCourse(id);
@@ -116,7 +113,7 @@ public class CourseController {
 		}
 	}
 
-	@GetMapping(params = {"value"}, path = "/search-courses-by-title")
+	@GetMapping(params = {"value"}, path = "/title")
 	public ResponseEntity findByTitleContains(@RequestParam String value) {
 		try {
 			List<Course> data = courseService.findByTitleContains(value);
@@ -132,26 +129,10 @@ public class CourseController {
 		}
 	}
 
-	@GetMapping(params = {"value"}, path = "/search-courses-by-description")
+	@GetMapping(params = {"value"}, path = "/description")
 	public ResponseEntity findByDescriptionContains(@RequestParam String value) {
 		try {
 			List<Course> data = courseService.findByDescriptionContains(value);
-
-			res.setCode("00");
-			res.setMsg("success");
-			res.setStatus("ok");
-			res.setData(data);
-
-			return ResponseEntity.status(HttpStatus.OK).body(res);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRes("X01", e.getMessage()));
-		}
-	}
-
-	@GetMapping("/find-some-courses")
-	public ResponseEntity findSomeCourses(@RequestParam int page, @RequestParam int pageSize) {
-		try {
-			List<Course> data = courseService.findSomeCourses(page, pageSize);
 
 			res.setCode("00");
 			res.setMsg("success");
