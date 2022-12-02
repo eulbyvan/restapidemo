@@ -32,7 +32,7 @@ public class Course {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "course_type_id")
 	private CourseType courseType;
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "course_info_id")
 	private CourseInfo courseInfo;
 }
