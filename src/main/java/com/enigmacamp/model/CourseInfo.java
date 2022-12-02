@@ -1,6 +1,8 @@
 package com.enigmacamp.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -12,6 +14,8 @@ import javax.persistence.*;
  */
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "tbl_course_info")
 public class CourseInfo {

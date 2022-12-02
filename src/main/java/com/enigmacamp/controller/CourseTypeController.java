@@ -1,6 +1,8 @@
 package com.enigmacamp.controller;
 
+import com.enigmacamp.model.Course;
 import com.enigmacamp.model.CourseType;
+import com.enigmacamp.model.request.CourseReq;
 import com.enigmacamp.model.request.CourseTypeReq;
 import com.enigmacamp.model.response.ErrorRes;
 import com.enigmacamp.model.response.PagingResponse;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author stu (https://www.eulbyvan.com/)
@@ -60,18 +63,38 @@ public class CourseTypeController {
 		}
 	}
 
-	@PostMapping("/")
-	public ResponseEntity addCourseType(@RequestBody CourseTypeReq req) {
-		try {
-			CourseType courseType = modelMapper.map(req, CourseType.class);
-			CourseType data = courseTypeService.addCourseType(courseType);
+//	@PostMapping("/")
+//	public ResponseEntity addCourseType(@RequestBody CourseTypeReq req) {
+//		try {
+//			CourseType courseType = modelMapper.map(req, CourseType.class);
+//			CourseType data = courseTypeService.addCourseType(courseType);
+//
+//			res.setCode("00");
+//			res.setMsg("success");
+//			res.setStatus("ok");
+//			res.setData(data);
+//
+//			return ResponseEntity.status(HttpStatus.CREATED).body(res);
+//		} catch (Exception e) {
+//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRes("X01", e.getMessage()));
+//		}
+//	}
 
+	@PostMapping("/")
+	public ResponseEntity saveCourseTypes(@RequestBody List<CourseTypeReq> req) {
+		try {
+			List<CourseType> courseTypes = req
+					.stream()
+					.map(e -> modelMapper.map(e, CourseType.class))
+					.collect(Collectors.toList());
+
+			courseTypeService.addCourseTypes(courseTypes);
 			res.setCode("00");
 			res.setMsg("success");
 			res.setStatus("ok");
-			res.setData(data);
+			res.setData(courseTypes);
 
-			return ResponseEntity.status(HttpStatus.CREATED).body(res);
+			return ResponseEntity.status(HttpStatus.OK).body(res);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRes("X01", e.getMessage()));
 		}

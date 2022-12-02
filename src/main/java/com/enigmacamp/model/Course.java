@@ -30,9 +30,9 @@ public class Course {
 	@Column(name = "link", nullable = false, length = 200)
 	private String link;
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "course_type_id")
+	@JoinColumn(name = "course_type_id", nullable = false)
 	private CourseType courseType;
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "course_info_id")
+	@JoinColumn(name = "course_info_id", nullable = false)
 	private CourseInfo courseInfo;
 }

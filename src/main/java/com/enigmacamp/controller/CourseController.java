@@ -148,19 +148,17 @@ public class CourseController {
 
 	@PostMapping("/")
 	public ResponseEntity saveCourses(@RequestBody List<CourseReq> req) {
-
-
 		try {
-			CourseReq courseReq = null;
-
-			List<Course> courses = req.stream()
-					.map(element -> modelMapper.map(courseReq, Course.class))
+			List<Course> courses = req
+					.stream()
+					.map(e -> modelMapper.map(e, Course.class))
 					.collect(Collectors.toList());
 
 			courseService.addCourses(courses);
 			res.setCode("00");
 			res.setMsg("success");
 			res.setStatus("ok");
+			res.setData(courses);
 
 			return ResponseEntity.status(HttpStatus.OK).body(res);
 		} catch (Exception e) {

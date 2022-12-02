@@ -1,7 +1,9 @@
 package com.enigmacamp.controller;
 
+import com.enigmacamp.model.Course;
 import com.enigmacamp.model.CourseInfo;
 import com.enigmacamp.model.request.CourseInfoReq;
+import com.enigmacamp.model.request.CourseReq;
 import com.enigmacamp.model.response.ErrorRes;
 import com.enigmacamp.model.response.PagingResponse;
 import com.enigmacamp.model.response.SuccessRes;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author stu (https://www.eulbyvan.com/)
@@ -60,18 +63,38 @@ public class CourseInfoController {
 		}
 	}
 
-	@PostMapping("/")
-	public ResponseEntity addCourseInfo(@RequestBody CourseInfoReq req) {
-		try {
-			CourseInfo courseInfo = modelMapper.map(req, CourseInfo.class);
-			CourseInfo data = courseInfoService.addCourseInfo(courseInfo);
+//	@PostMapping("/")
+//	public ResponseEntity addCourseInfo(@RequestBody CourseInfoReq req) {
+//		try {
+//			CourseInfo courseInfo = modelMapper.map(req, CourseInfo.class);
+//			CourseInfo data = courseInfoService.addCourseInfo(courseInfo);
+//
+//			res.setCode("00");
+//			res.setMsg("success");
+//			res.setStatus("ok");
+//			res.setData(data);
+//
+//			return ResponseEntity.status(HttpStatus.CREATED).body(res);
+//		} catch (Exception e) {
+//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRes("X01", e.getMessage()));
+//		}
+//	}
 
+	@PostMapping("/")
+	public ResponseEntity saveCourseInfos(@RequestBody List<CourseInfoReq> req) {
+		try {
+			List<CourseInfo> courseInfos = req
+					.stream()
+					.map(e -> modelMapper.map(e, CourseInfo.class))
+					.collect(Collectors.toList());
+
+			courseInfoService.addCourseInfos(courseInfos);
 			res.setCode("00");
 			res.setMsg("success");
 			res.setStatus("ok");
-			res.setData(data);
+			res.setData(courseInfos);
 
-			return ResponseEntity.status(HttpStatus.CREATED).body(res);
+			return ResponseEntity.status(HttpStatus.OK).body(res);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRes("X01", e.getMessage()));
 		}
