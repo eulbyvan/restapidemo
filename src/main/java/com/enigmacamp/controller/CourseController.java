@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author stu (https://www.eulbyvan.com/)
@@ -66,22 +67,22 @@ public class CourseController {
 		}
 	}
 
-	@PostMapping("/")
-	public ResponseEntity addCourse(@RequestBody CourseReq req) {
-		try {
-			Course course = modelMapper.map(req, Course.class);
-			Course data = courseService.addCourse(course);
-
-			res.setCode("00");
-			res.setMsg("success");
-			res.setStatus("ok");
-			res.setData(data);
-
-			return ResponseEntity.status(HttpStatus.CREATED).body(res);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRes("X01", e.getMessage()));
-		}
-	}
+//	@PostMapping("/")
+//	public ResponseEntity addCourse(@RequestBody CourseReq req) {
+//		try {
+//			Course course = modelMapper.map(req, Course.class);
+//			Course data = courseService.addCourse(course);
+//
+//			res.setCode("00");
+//			res.setMsg("success");
+//			res.setStatus("ok");
+//			res.setData(data);
+//
+//			return ResponseEntity.status(HttpStatus.CREATED).body(res);
+//		} catch (Exception e) {
+//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRes("X01", e.getMessage()));
+//		}
+//	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity editCourse(@RequestBody Course course, @PathVariable("id") String id) {
@@ -145,25 +146,25 @@ public class CourseController {
 		}
 	}
 
-//	@PostMapping("/add-courses")
-//	public ResponseEntity saveCourses(@RequestBody List<CourseReq> req) {
-//
-//
-//		try {
-//			CourseReq courseReq = null;
-//
-//			List<Course> courses = req.stream()
-//					.map(element -> modelMapper.map(courseReq, Course.class))
-//					.collect(Collectors.toList());
-//
-//			courseService.addCourses(courses);
-//			res.setCode("00");
-//			res.setMsg("success");
-//			res.setStatus("ok");
-//
-//			return ResponseEntity.status(HttpStatus.OK).body(res);
-//		} catch (Exception e) {
-//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRes("X01", e.getMessage()));
-//		}
-//	}
+	@PostMapping("/")
+	public ResponseEntity saveCourses(@RequestBody List<CourseReq> req) {
+
+
+		try {
+			CourseReq courseReq = null;
+
+			List<Course> courses = req.stream()
+					.map(element -> modelMapper.map(courseReq, Course.class))
+					.collect(Collectors.toList());
+
+			courseService.addCourses(courses);
+			res.setCode("00");
+			res.setMsg("success");
+			res.setStatus("ok");
+
+			return ResponseEntity.status(HttpStatus.OK).body(res);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorRes("X01", e.getMessage()));
+		}
+	}
 }
